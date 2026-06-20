@@ -35,3 +35,14 @@ export const getFlashSale = () => api.get("/restaurants/flash-sale").then(r => r
 export const getRecommendations = () => api.get("/orders/recommendations").then(r => r.data)
 export const forgotPassword = (email) => api.post("/auth/forgot-password?email=" + email).then(r => r.data)
 export const resetPassword = (token, newPassword) => api.post("/auth/reset-password?token=" + token + "&new_password=" + newPassword).then(r => r.data)
+
+export const getMerchantOrders = (status) => api.get("/merchant/orders" + (status ? "?status=" + status : "")).then(r => r.data)
+export const getRiderAvailableOrders = () => api.get("/riders/available-orders").then(r => r.data)
+export const getRiderMyOrders = () => api.get("/riders/my-orders").then(r => r.data)
+export const acceptOrder = (id) => api.put("/riders/orders/" + id + "/accept").then(r => r.data)
+export const pickupOrder = (id) => api.put("/riders/orders/" + id + "/pickup").then(r => r.data)
+export const deliverOrder = (id) => api.put("/riders/orders/" + id + "/deliver").then(r => r.data)
+
+
+export const sendChat = (order_id, sender, text, sender_name) => api.post("/chat/send", {order_id, sender, text, sender_name}).then(r => r.data)
+export const getChatMessages = (order_id) => api.get("/chat/messages/" + order_id).then(r => r.data)

@@ -5,7 +5,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from server.config import SERVER_HOST, SERVER_PORT
-from server.routers import auth, restaurants, orders, riders, admin, upload
+from server.routers import auth, restaurants, orders, riders, admin, upload, merchants, chat
 
 app = FastAPI(title="Enatega Food Delivery", version="1.0.0")
 
@@ -23,6 +23,8 @@ app.include_router(orders.router)
 app.include_router(riders.router)
 app.include_router(admin.router)
 app.include_router(upload.router)
+app.include_router(merchants.router)
+app.include_router(chat.router)
 
 static_dir = os.path.join(os.path.dirname(__file__), "outputs")
 os.makedirs(static_dir, exist_ok=True)
