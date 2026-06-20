@@ -1,0 +1,10 @@
+.expo
+.DS_Store
+google-service-account.json
+google-services.json
+
+# Sensitive credentials / service account files
+*google-service-account.json
+*google-services*.json
+*.pem
+*.p12
