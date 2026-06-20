@@ -51,3 +51,17 @@ def get_menu(restaurant_id: int, db: Session = Depends(get_db)):
             })
         result.append({"id": cat.id, "name": cat.name, "items": item_list})
     return result
+
+@router.get("/flash-sale")
+def get_flash_sale(db: Session = Depends(get_db)):
+    items = db.query(MenuItem).filter(MenuItem.is_flash_sale == True, MenuItem.is_available == True).all()
+    result = []
+    for item in items:
+        discounted = round(item.price * (100 - (item.discount_percent or 0)) / 100, 2)
+        result.append({
+            "id": item.id, "name": item.name, "original_price": item.price,
+            "discount_percent": item.discount_percent or 0, "discounted_price": discounted,
+            "image_url": item.image_url, "restaurant_id": item.restaurant_id,
+            "restaurant_name": item.restaurant.name if item.restaurant else ""
+        })
+    return result

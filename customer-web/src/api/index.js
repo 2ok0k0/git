@@ -30,3 +30,8 @@ export const getRiderPerformance = () => api.get("/admin/analytics/rider-perform
 export const getSalesByDay = (days = 30) => api.get("/admin/analytics/sales-by-day?days=" + days).then((r) => r.data)
 export const getOrderStatusDistribution = () => api.get("/admin/analytics/order-status-distribution").then((r) => r.data)
 export const getUsers = () => api.get("/admin/users").then((r) => r.data)
+
+export const getFlashSale = () => api.get("/restaurants/flash-sale").then(r => r.data)
+export const getRecommendations = () => api.get("/orders/recommendations").then(r => r.data)
+export const forgotPassword = (email) => api.post("/auth/forgot-password?email=" + email).then(r => r.data)
+export const resetPassword = (token, newPassword) => api.post("/auth/reset-password?token=" + token + "&new_password=" + newPassword).then(r => r.data)

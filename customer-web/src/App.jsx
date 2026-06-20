@@ -3,6 +3,7 @@ import { CartProvider } from "./context/CartContext"
 import Navbar from "./components/Navbar"
 import Home from "./pages/Home"
 import Login from "./pages/Login"
+import ForgotPassword from "./pages/ForgotPassword"
 import Register from "./pages/Register"
 import Restaurant from "./pages/Restaurant"
 import Checkout from "./pages/Checkout"
@@ -21,6 +22,7 @@ export default function App() {
       <main style={{ paddingTop: 70 }}>
         <Routes>
           <Route path="/login" element={<Login />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/register" element={<Register />} />
           <Route path="/" element={<Protected><Home /></Protected>} />
           <Route path="/restaurant/:id" element={<Protected><Restaurant /></Protected>} />

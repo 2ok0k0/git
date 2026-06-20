@@ -66,3 +66,38 @@ def login(req: LoginRequest, db: Session = Depends(get_db)):
 @router.get("/me")
 def get_me(current_user: User = Depends(get_current_user)):
     return {"id": current_user.id, "name": current_user.name, "email": current_user.email, "role": current_user.role, "phone": current_user.phone, "avatar_url": current_user.avatar_url}
+
+
+@router.post("/forgot-password")
+def forgot_password(email: str, db: Session = Depends(get_db)):
+    import uuid, datetime
+    user = db.query(User).filter(User.email == email).first()
+    if not user:
+        return {"message": "If the email exists, a reset link has been sent"}
+    token = uuid.uuid4().hex
+    user.reset_token = token
+    user.reset_token_expiry = datetime.datetime.utcnow() + datetime.timedelta(hours=1)
+    db.commit()
+    return {"message": "Reset token generated (demo)", "reset_token": token, "email": email}
+
+@router.post("/reset-password")
+def reset_password(token: str, new_password: str, db: Session = Depends(get_db)):
+    import datetime
+    user = db.query(User).filter(User.reset_token == token).first()
+    if not user:
+        raise HTTPException(status_code=400, detail="Invalid token")
+    now = datetime.datetime.utcnow()
+    if user.reset_token_expiry and user.reset_token_expiry < now:
+        raise HTTPException(status_code=400, detail="Token expired")
+    user.password_hash = hash_password(new_password)
+    user.reset_token = None
+    user.reset_token_expiry = None
+    db.commit()
+    return {"message": "Password reset successful"}
+
+@router.post("/wechat-login")
+def wechat_login(code: str = "", db: Session = Depends(get_db)):
+    # Demo: simulate WeChat login with a hardcoded account
+    user = db.query(User).filter(User.email == "alice@test.com").first()
+    token = create_access_token({"user_id": user.id, "role": user.role})
+    return {"token": token, "user": {"id": user.id, "name": user.name, "email": user.email, "role": user.role}, "is_new_user": False}

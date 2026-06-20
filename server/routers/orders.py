@@ -130,3 +130,12 @@ def rate_order(order_id: int, rating: int, comment: str = "", current_user: User
     db.add(review)
     db.commit()
     return {"message": "Review submitted"}
+
+@router.get("/recommendations")
+def get_recommendations(limit: int = 6, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    from sqlalchemy import func as sa_func
+    top = db.query(
+        OrderItem.menu_item_id, OrderItem.item_name,
+        sa_func.sum(OrderItem.quantity).label("total_qty")
+    ).group_by(OrderItem.menu_item_id).order_by(sa_func.sum(OrderItem.quantity).desc()).limit(limit).all()
+    return [{"menu_item_id": r[0], "name": r[1], "popularity": r[2]} for r in top]

@@ -29,7 +29,11 @@ export default function Login() {
         <div className="form-group"><label>Password</label><input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required /></div>
         <button type="submit" className="submit-btn">Login</button>
       </form>
+      <div className="auth-link"><Link to="/forgot-password">Forgot password?</Link></div>
       <div className="auth-link">Not registered? <Link to="/register">Create account</Link></div>
+      <div style={{ textAlign: "center", marginTop: 16 }}>
+        <button onClick={() => { window.location.href = "http://localhost:3000/api/auth/wechat-login?code=demo" }} style={{ background: "#07C160", color: "white", border: "none", borderRadius: 8, padding: "10px 24px", cursor: "pointer", fontSize: 14 }}>WeChat Login (Demo)</button>
+      </div>
     </div>
   )
 }
