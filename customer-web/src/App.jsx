@@ -8,6 +8,7 @@ import Restaurant from "./pages/Restaurant"
 import Checkout from "./pages/Checkout"
 import Orders from "./pages/Orders"
 import OrderDetail from "./pages/OrderDetail"
+import Analytics from "./pages/Analytics"
 
 function Protected({ children }) {
   return localStorage.getItem("token") ? children : <Navigate to="/login" />
@@ -26,6 +27,7 @@ export default function App() {
           <Route path="/checkout" element={<Protected><Checkout /></Protected>} />
           <Route path="/orders" element={<Protected><Orders /></Protected>} />
           <Route path="/orders/:id" element={<Protected><OrderDetail /></Protected>} />
+          <Route path="/analytics" element={<Protected><Analytics /></Protected>} />
         </Routes>
       </main>
     </CartProvider>

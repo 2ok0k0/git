@@ -81,3 +81,25 @@ def rider_performance(db: Session = Depends(get_db), current_user: User = Depend
         total_rev = db.query(func.sum(Order.total)).filter(Order.rider_id == rider.id, Order.status == OrderStatus.DELIVERED.value).scalar() or 0
         result.append({"rider_id": rider.id, "rider_name": rider.name, "completed_orders": completed, "total_revenue": total_rev})
     return sorted(result, key=lambda x: x["completed_orders"], reverse=True)
+
+
+from sqlalchemy import func as sa_func
+
+@router.get("/analytics/sales-by-day")
+def sales_by_day(days: int = 30, db: Session = Depends(get_db), current_user: User = Depends(require_admin)):
+    import datetime
+    cutoff = datetime.datetime.utcnow() - datetime.timedelta(days=days)
+    results = db.query(
+        sa_func.date(Order.created_at).label("date"),
+        sa_func.count(Order.id).label("orders"),
+        sa_func.sum(Order.total).label("revenue")
+    ).filter(
+        Order.status == "delivered",
+        Order.created_at >= cutoff
+    ).group_by(sa_func.date(Order.created_at)).order_by(sa_func.date(Order.created_at)).all()
+    return [{"date": str(r[0]), "orders": r[1], "revenue": float(r[2]) if r[2] else 0} for r in results]
+
+@router.get("/analytics/order-status-distribution")
+def order_status_distribution(db: Session = Depends(get_db), current_user: User = Depends(require_admin)):
+    results = db.query(Order.status, sa_func.count(Order.id)).group_by(Order.status).all()
+    return [{"status": r[0], "count": r[1]} for r in results]

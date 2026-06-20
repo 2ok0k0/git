@@ -18,6 +18,7 @@ export default function Navbar() {
         <Link to="/orders">Orders</Link>
         <span style={{ fontSize: 13, opacity: 0.8 }}>{user.name}</span>
         <button className="cart-btn" onClick={() => navigate("/checkout")}>Cart ({itemCount})</button>
+        {(user.role === "admin" || user.role === "analyst") && <Link to="/analytics" style={{ color: "rgba(255,255,255,0.9)", fontSize: 14 }}>Analytics</Link>}
         <button className="btn btn-sm" style={{ background: "rgba(255,255,255,0.15)", color: "white" }} onClick={logout}>Logout</button>
       </div>
     </nav>
