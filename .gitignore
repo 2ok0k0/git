@@ -1,10 +1,38 @@
-.expo
-.DS_Store
-google-service-account.json
-google-services.json
+﻿# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
 
-# Sensitive credentials / service account files
+# Database
+*.db
+*.db-shm
+*.db-wal
+
+# Generated
+.env
+.venv
+venv/
+node_modules/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Windows
+Thumbs.db
+*.log
+
+# Credentials
 *google-service-account.json
 *google-services*.json
 *.pem
 *.p12
+
+# Temp scripts
+read_docx.py
+gen_*.py
